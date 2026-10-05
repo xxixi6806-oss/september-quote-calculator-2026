@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="September Quote Calculator 2026">
+  <title>9月智能报价器</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main class="shell">
+  <header class="hero">
+    <div><span class="eyebrow">SEPTEMBER PRICE DESK</span><h1>智能报价器</h1><p>美元 / 澳元 / 巴西雷亚尔 · 成本与利润分析</p></div>
+    <div class="hero-actions"><button id="adminBtn" class="ghost">管理员登录</button><button id="clearBtn" class="ghost">清空购物车</button></div>
+  </header>
+
+  <section class="toolbar card">
+    <div class="search"><input id="search" type="search" placeholder="搜索产品名、缩写或规格"><button id="searchBtn">搜索</button></div>
+    <div class="currency-tabs" role="group" aria-label="报价币种"><button class="currency active" data-currency="USD">USD 美元</button><button class="currency" data-currency="AUD">AUD 澳元</button><button class="currency" data-currency="BRL">BRL 巴西币</button></div>
+  </section>
+
+  <section id="loginPanel" class="card admin" hidden>
+    <div class="section-head"><div><span class="eyebrow">SECURE ACCESS</span><h2>管理员登录</h2><p>登录后才能查看成本、利润以及添加或修改商品。</p></div><button id="closeLogin" class="muted">关闭</button></div>
+    <form id="loginForm" class="login-form">
+      <label>管理员邮箱<input id="loginEmail" type="email" autocomplete="username" required></label>
+      <label>密码<input id="loginPassword" type="password" autocomplete="current-password" minlength="6" required></label>
+      <div class="form-actions"><button type="submit">登录</button><button id="signupBtn" type="button" class="muted">首次创建账号</button><button id="resetPasswordBtn" type="button" class="muted">忘记密码</button></div>
+    </form>
+    <p id="authMessage" class="auth-message" aria-live="polite"></p>
+  </section>
+
+  <section id="admin" class="card admin" hidden>
+    <div class="section-head"><div><span class="eyebrow">INTERNAL · CLOUD SYNC</span><h2>商品管理后台</h2><p id="adminIdentity">保存后自动同步到所有设备。</p></div><div class="form-actions"><button id="logoutBtn" class="muted">退出登录</button><button id="closeAdmin" class="muted">关闭</button></div></div>
+    <form id="productForm" class="product-form">
+      <input id="editId" type="hidden"><label>缩写<input id="fCode" required></label><label>名称<input id="fName" required></label><label>规格<input id="fSpec" required></label><label>售价 USD<input id="fPrice" type="number" min="0" step=".01" required></label><label>售价 BRL<input id="fPriceBrl" type="number" min="0" step=".01" required></label><label>成本 CNY<input id="fCost" type="number" min="0" step=".01" required></label>
+      <div class="form-actions"><button id="saveProductBtn" type="submit">保存商品</button><button id="cancelEdit" type="button" class="muted">取消编辑</button></div>
+    </form>
+    <p id="adminMessage" class="auth-message" aria-live="polite"></p>
+    <div class="admin-tools"><input id="adminSearch" type="search" placeholder="筛选商品"><span id="adminCount"></span></div>
+    <div class="table-scroll"><table class="admin-table"><thead><tr><th>缩写</th><th>名称</th><th>规格</th><th>USD 售价</th><th>AUD 售价</th><th>BRL 售价</th><th>CNY 成本</th><th>操作</th></tr></thead><tbody id="adminRows"></tbody></table></div>
+  </section>
+
+  <section class="card"><div class="section-head compact"><div><span class="eyebrow">CATALOG</span><h2>产品目录</h2></div><span id="resultCount" class="pill">正在同步…</span></div><div id="products" class="catalog"><p class="empty">正在载入商品…</p></div></section>
+
+  <section class="card">
+    <div class="section-head compact"><div><span class="eyebrow">QUOTE CART</span><h2>报价购物车</h2></div></div>
+    <div id="cart"></div>
+    <div class="controls">
+      <label>折扣 (%)<input id="discount" type="number" min="0" max="100" step=".1" value="0"></label><label class="check">自动运费<input id="autoShipping" type="checkbox" checked></label><label>运费 <span class="currency-mark">$</span><input id="shipping" type="number" min="0" step=".01" value="55" disabled></label><label>物流保险 (%)<input id="insurance" type="number" min="0" max="100" step=".1" value="5"></label><label>手续费扣除 (%)<input id="fee" type="number" min="0" max="100" step=".1" value="10"></label><label>固定汇率<input type="text" value="1 USD = 1.43 AUD" readonly></label>
+    </div>
+    <div class="summary">
+      <div><span>商品小计</span><strong id="subtotal"></strong></div><div><span>折扣金额</span><strong id="discountAmount"></strong></div><div><span>折后商品额</span><strong id="afterDiscount"></strong></div><div><span>运费</span><strong id="shippingAmount"></strong></div><div><span>物流保险</span><strong id="insuranceAmount"></strong></div><div class="total"><span>最终报价</span><strong id="grandTotal"></strong></div><div class="internal admin-only" hidden><span id="costLabel">成本合计（CNY）</span><strong id="costTotal"></strong></div><div class="internal admin-only" hidden><span>手续费扣除</span><strong id="feeAmount"></strong></div><div class="profit admin-only" hidden><span id="profitLabel">净利润（USD）</span><strong id="profit"></strong></div>
+    </div>
+    <p class="note">AUD 固定按 1 USD = 1.43 AUD 换算。本网站使用独立的 9 月商品数据库，不与 smart-quotation-calculator 共用或覆盖成本数据。</p>
+  </section>
+
+  <section class="card quote-section"><div class="section-head"><div><span class="eyebrow">OFFICIAL</span><h2>Official Quotation</h2><p id="quoteCurrency"></p></div></div><div id="quotation"></div></section>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
