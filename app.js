@@ -9,7 +9,7 @@ function node(tag,cls,text){const n=document.createElement(tag);if(cls)n.classNa
 function normalize(p){return{id:p.id,code:p.code,name:p.name,spec:p.spec,price:Number(p.price_usd??p.price??0),priceBrl:Number(p.price_brl??p.priceBrl??0),cost:p.cost_cny==null?null:Number(p.cost_cny)}}
 function rebuild(){groups=products.reduce((m,p)=>{if(!m.has(p.name))m.set(p.name,[]);m.get(p.name).push(p);return m},new Map())}
 function rate(){return currency==="AUD"?AUD_PER_USD:currency==="BRL"?5.2:1}
-function money(value){return new Intl.NumberFormat(currency==="BRL"?"pt-BR":currency==="AUD"?"en-AU":"en-US",{style:"currency",currency,minimumFractionDigits:0,maximumFractionDigits:0}).format(Math.trunc(Number(value)||0))}
+function money(value){const amount=Math.trunc(Number(value)||0);if(currency==="AUD")return "A$"+new Intl.NumberFormat("en-AU",{maximumFractionDigits:0}).format(amount);return new Intl.NumberFormat(currency==="BRL"?"pt-BR":"en-US",{style:"currency",currency,minimumFractionDigits:0,maximumFractionDigits:0}).format(amount)}
 function unitPrice(p){return currency==="BRL"?Number(p.priceBrl||0):currency==="AUD"?Number(p.price||0)*AUD_PER_USD:Number(p.price||0)}
 function cny(v){return new Intl.NumberFormat("zh-CN",{style:"currency",currency:"CNY",minimumFractionDigits:0,maximumFractionDigits:0}).format(Math.trunc(Number(v)||0))}
 function costMoney(value){return currency==="BRL"?new Intl.NumberFormat("pt-BR",{style:"currency",currency:"BRL",minimumFractionDigits:0,maximumFractionDigits:0}).format(Math.trunc((Number(value)||0)/CNY_PER_BRL)):cny(value)}
