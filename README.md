@@ -1,6 +1,6 @@
 # September Quote Calculator 2026
 
-独立部署的 9 月智能报价器，支持 USD、AUD（固定 1 USD = 1.43 AUD）、EUR（固定 1 USD = 0.9 EUR）。
+独立部署的 9 月智能报价器，支持 USD、AUD（固定 1 USD = 1.43 AUD）、EUR（固定 1 USD = 0.9 EUR）、GBP（固定 1 USD = 0.77 GBP）。
 
 - 访客只能读取公开售价并制作报价。
 - 管理员登录后可查看成本与利润，并添加、修改或删除商品。
